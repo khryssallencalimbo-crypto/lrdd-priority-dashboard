@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">LRDD logo</title>
+  <rect width="64" height="64" rx="12" fill="#16324f"/>
+  <path d="M18 46h28" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M32 14v32" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M20 22h24" stroke="#8dd7cf" stroke-width="4" stroke-linecap="round"/>
+  <path d="M23 22l-8 14h16l-8-14Z" fill="#f4c95d"/>
+  <path d="M41 22l-8 14h16l-8-14Z" fill="#f4c95d"/>
+</svg>
+
