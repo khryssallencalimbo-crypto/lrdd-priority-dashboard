@@ -126,9 +126,9 @@
 
             <section id="calendar" class="calendar-band">
                 <div class="score-card">
-                    <span>Q2 2026 Workbook</span>
-                    <h2 id="calendarTaskTotal">Google Sheet</h2>
-                    <p>March to June task monitoring, extracted live from the shared Google Sheet.</p>
+                    <span>Public Demonstration Dataset</span>
+                    <h2 id="calendarTaskTotal">Demo Tasks</h2>
+                    <p>Synthetic task records for safely demonstrating the dashboard features.</p>
                 </div>
 
                 <div class="dashboard-widget">
@@ -137,8 +137,8 @@
                         <span id="resultCount">0 records</span>
                     </div>
                     <table class="info-table">
-                        <tr><td>Source</td><td>LRDD Task Monitoring Google Sheet</td></tr>
-                        <tr><td>Mode</td><td>Live Google Sheets CSV</td></tr>
+                        <tr><td>Source</td><td>Sanitized public demonstration</td></tr>
+                        <tr><td>Mode</td><td>Bundled synthetic records</td></tr>
                         <tr><td>Status</td><td id="calendarStatus">Loading</td></tr>
                     </table>
                 </div>
@@ -146,8 +146,8 @@
                 <div class="dashboard-widget schedule-widget">
                     <div class="widget-title">
                         <div>
-                            <h3>Live Schedule</h3>
-                            <span id="scheduleUpdated">Auto-syncing every minute</span>
+                            <h3>Public Calendar</h3>
+                            <span id="scheduleUpdated">Refreshes every minute</span>
                         </div>
                         <span id="scheduleStatus" class="mini-status loading">Loading</span>
                     </div>
@@ -173,7 +173,7 @@
                     <div id="scheduleMonthTabs" class="calendar-month-tabs" aria-label="Calendar months"></div>
 
                     <div id="scheduleList" class="schedule-list">
-                        <div class="empty">Loading live schedule...</div>
+                        <div class="empty">Loading calendar...</div>
                     </div>
 
                 </div>
@@ -304,8 +304,8 @@
         </aside>
     </div>
 
-    <script src="data/local-data.js"></script>
-    <script src="js/app.js"></script>
+    <script src="data/local-data.js?v=20260716-1328"></script>
+    <script src="js/app.js?v=20260716-1328"></script>
 </body>
 </html>
 
