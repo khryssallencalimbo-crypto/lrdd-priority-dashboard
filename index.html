@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LRDD Performance Analytics System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <img src="assets/lrdd-logo.svg" alt="LRDD">
+                </div>
+                <div class="brand-text">
+                    <h3>LRDD</h3>
+                    <span>Analytics System</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <ul>
+                    <li class="active"><a href="#dashboard"><span class="nav-icon">01</span><span>Dashboard</span></a></li>
+                    <li><a href="#personnel"><span class="nav-icon">02</span><span>Personnel</span></a></li>
+                    <li><a href="#committee"><span class="nav-icon">03</span><span>Committees</span></a></li>
+                    <li><a href="#calendar"><span class="nav-icon">04</span><span>Calendar</span></a></li>
+                    <li><a href="#analytics"><span class="nav-icon">05</span><span>Analytics</span></a></li>
+                    <li><a href="#tasks"><span class="nav-icon">06</span><span>Task Explorer</span></a></li>
+                    <li class="quest-nav-item">
+                        <button id="priorityQuestBtn" type="button" aria-controls="priorityQuestPanel" aria-expanded="false">
+                            <span class="nav-icon">07</span>
+                            <span>Priority Quest</span>
+                            <small id="priorityQuestBadge">0</small>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-source">
+                <small>Data Source</small>
+                <strong>Google Sheets</strong>
+                <span id="lastUpdated">Waiting for data</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div class="page-title">
+                    <h1>LRDD Performance Analytics</h1>
+                    <p>Legislative Research and Drafting Division</p>
+                </div>
+
+                <div class="top-actions">
+                    <span id="statusBadge" class="status-badge loading">Loading</span>
+                    <button id="refreshBtn" type="button" class="btn btn-light">Refresh</button>
+                    <button id="exportBtn" type="button" class="btn btn-success">Export CSV</button>
+                </div>
+            </header>
+
+            <section id="dashboard" class="dashboard-section">
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">Executive Overview</span>
+                        <h2>Local Workbook Monitoring</h2>
+                    </div>
+                    <p>Metrics are generated live from the shared Google Sheet.</p>
+                </div>
+
+                <div class="kpi-grid">
+                    <article class="kpi-card primary">
+                        <div class="kpi-icon">T</div>
+                        <div class="kpi-content">
+                            <h6>Total Tasks</h6>
+                            <h2 id="totalTasks">0</h2>
+                            <small>Loaded from Google Sheets</small>
+                        </div>
+                    </article>
+
+                    <article class="kpi-card success">
+                        <div class="kpi-icon">C</div>
+                        <div class="kpi-content">
+                            <h6>Completed</h6>
+                            <h2 id="completedTasks">0</h2>
+                            <small id="completionRate">0.0% completion</small>
+                        </div>
+                    </article>
+
+                    <article class="kpi-card warning">
+                        <div class="kpi-icon">P</div>
+                        <div class="kpi-content">
+                            <h6>Pending</h6>
+                            <h2 id="pendingTasks">0</h2>
+                            <small>Open workload</small>
+                        </div>
+                    </article>
+
+                    <article class="kpi-card purple">
+                        <div class="kpi-icon">R</div>
+                        <div class="kpi-content">
+                            <h6>Average Rating</h6>
+                            <h2 id="averageRating">0.00</h2>
+                            <small>Across rated tasks</small>
+                        </div>
+                    </article>
+
+                    <article id="personnel" class="kpi-card cyan">
+                        <div class="kpi-icon">S</div>
+                        <div class="kpi-content">
+                            <h6>Personnel</h6>
+                            <h2 id="personnelCount">0</h2>
+                            <small>Assigned staff</small>
+                        </div>
+                    </article>
+
+                    <article id="committee" class="kpi-card dark">
+                        <div class="kpi-icon">M</div>
+                        <div class="kpi-content">
+                            <h6>Committees</h6>
+                            <h2 id="committeeCount">0</h2>
+                            <small>Request sources</small>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="calendar" class="calendar-band">
+                <div class="score-card">
+                    <span>Q2 2026 Workbook</span>
+                    <h2 id="calendarTaskTotal">Google Sheet</h2>
+                    <p>March to June task monitoring, extracted live from the shared Google Sheet.</p>
+                </div>
+
+                <div class="dashboard-widget">
+                    <div class="widget-title">
+                        <h3>Workbook Information</h3>
+                        <span id="resultCount">0 records</span>
+                    </div>
+                    <table class="info-table">
+                        <tr><td>Source</td><td>LRDD Task Monitoring Google Sheet</td></tr>
+                        <tr><td>Mode</td><td>Live Google Sheets CSV</td></tr>
+                        <tr><td>Status</td><td id="calendarStatus">Loading</td></tr>
+                    </table>
+                </div>
+
+                <div class="dashboard-widget schedule-widget">
+                    <div class="widget-title">
+                        <div>
+                            <h3>Live Schedule</h3>
+                            <span id="scheduleUpdated">Auto-syncing every minute</span>
+                        </div>
+                        <span id="scheduleStatus" class="mini-status loading">Loading</span>
+                    </div>
+
+                    <div class="google-calendar-toolbar">
+                        <div>
+                            <strong id="scheduleMonthLabel">Calendar</strong>
+                            <span id="scheduleCount">0 events</span>
+                        </div>
+                        <div class="calendar-nav">
+                            <button id="schedulePrevMonth" type="button" aria-label="Previous month">&lsaquo;</button>
+                            <button id="scheduleTodayBtn" type="button">Today</button>
+                            <button id="scheduleNextMonth" type="button" aria-label="Next month">&rsaquo;</button>
+                        </div>
+                    </div>
+
+                    <div class="calendar-legend" aria-label="Calendar event legend">
+                        <span><i class="legend-dot schedule"></i>Schedule</span>
+                        <span><i class="legend-dot national"></i>Philippine holiday</span>
+                        <span><i class="legend-dot local"></i>Butuan holiday</span>
+                    </div>
+
+                    <div id="scheduleMonthTabs" class="calendar-month-tabs" aria-label="Calendar months"></div>
+
+                    <div id="scheduleList" class="schedule-list">
+                        <div class="empty">Loading live schedule...</div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="analytics" class="analytics-grid">
+                <div class="card-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Monthly Task Volume</h3>
+                            <span id="monthCount">0 months</span>
+                        </div>
+                    </div>
+                    <canvas id="monthlyChart" height="240"></canvas>
+                </div>
+
+                <div class="card-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Committee Workload</h3>
+                            <span>Top 8 committees</span>
+                        </div>
+                    </div>
+                    <canvas id="committeeChart" height="460" role="img" aria-label="Top eight committees by number of tasks"></canvas>
+                </div>
+            </section>
+
+            <section id="filters" class="card-panel filter-panel">
+                <div class="filter-heading">
+                    <div>
+                        <h3>Task Explorer Filters</h3>
+                        <span>Search first, then narrow by date, status, committee, or personnel</span>
+                    </div>
+                    <button id="clearFiltersBtn" type="button" class="btn btn-primary">Clear Filters</button>
+                </div>
+
+                <div class="filter-grid">
+                    <label class="filter-search">
+                        <span>Search Records</span>
+                        <input id="searchInput" type="search" placeholder="Subject, task, committee, personnel, remarks">
+                    </label>
+
+                    <label>
+                        <span>Month</span>
+                        <select id="monthFilter">
+                            <option value="">All Months</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Status</span>
+                        <select id="statusFilter">
+                            <option value="">All Statuses</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Committee</span>
+                        <select id="committeeFilter">
+                            <option value="">All Committees</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Personnel</span>
+                        <select id="personnelFilter">
+                            <option value="">All Personnel</option>
+                        </select>
+                    </label>
+                </div>
+            </section>
+
+            <section id="tasks" class="card-panel table-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Task Explorer</h3>
+                        <span>Complete LRDD task monitoring database</span>
+                    </div>
+                    <span class="table-hint">Click a column heading to sort</span>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-sort="taskID">ID</th>
+                                <th data-sort="received">Received</th>
+                                <th data-sort="personnel">Personnel</th>
+                                <th data-sort="committee">Committee</th>
+                                <th data-sort="subject">Subject</th>
+                                <th data-sort="task">Task</th>
+                                <th data-sort="completed">Status</th>
+                                <th data-sort="duration">Duration</th>
+                                <th data-sort="rating">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskTableBody">
+                            <tr>
+                                <td colspan="9" class="empty">Loading Google Sheet data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <div id="priorityQuestOverlay" class="quest-overlay" hidden></div>
+        <aside id="priorityQuestPanel" class="priority-quest-panel" aria-hidden="true" aria-labelledby="priorityQuestTitle">
+            <div class="quest-panel-header">
+                <div>
+                    <span class="quest-eyebrow">Eisenhower Matrix</span>
+                    <h2 id="priorityQuestTitle">Priority Quest</h2>
+                    <p>Based on the current Task Explorer results</p>
+                </div>
+                <button id="priorityQuestClose" type="button" class="quest-close" aria-label="Close Priority Quest">&times;</button>
+            </div>
+
+            <div id="priorityQuestHero" class="quest-hero" aria-live="polite">
+                <span class="quest-level">Next best action</span>
+                <h3>Loading your quest...</h3>
+            </div>
+
+            <div id="priorityMatrix" class="priority-matrix"></div>
+
+            <p class="quest-method">Deadlines are ranked first: overdue, due within 3 days, due within 7 days, then later or undated work. Importance breaks ties in favor of legislative, legal, policy, and budget work.</p>
+        </aside>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
+
