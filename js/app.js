@@ -1,18 +1,6 @@
 "use strict";
 
-const SHEET_ID = "1p6OM1xFRm0fda1RYYmch9xFcYRKQmyi8CUdP0MNHPy8";
-const SHEET_GID = "531198136";
-const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
-const SHEET_CSV_BACKUP_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
-const SHEET_GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${SHEET_GID}`;
-const SCHEDULE_SHEET_ID = "1829YWLuvpU6ysiCu8SJ1_IFJUBT3QbGWU_cYdroqvO4";
-const SCHEDULE_SHEET_GIDS = [
-    "58812189",  // July 2026
-    "633782130"  // August 2026
-];
-const SCHEDULE_GVIZ_URLS = SCHEDULE_SHEET_GIDS.map(gid =>
-    `https://docs.google.com/spreadsheets/d/${SCHEDULE_SHEET_ID}/gviz/tq?gid=${gid}`
-);
+const SCHEDULE_GVIZ_URLS = [];
 const DASHBOARD_REFRESH_MS = 60 * 1000;
 const SCHEDULE_REFRESH_MS = 60 * 1000;
 
@@ -282,14 +270,11 @@ async function loadSchedule(options = {}) {
 }
 
 async function loadSheetRows() {
-    try {
-        return await loadSheetRowsWithScript(new Error("Script loader primary path."));
+    const tasks = window.LRDD_LOCAL_DATA && window.LRDD_LOCAL_DATA.tasks;
+    if (!Array.isArray(tasks) || !tasks.length) {
+        throw new Error("The sanitized public demonstration data is unavailable.");
     }
-    catch (scriptError) {
-        console.warn("Script loader failed. Trying fetch loader.", scriptError);
-        const csv = await fetchSheetCSV();
-        return parseCSV(csv);
-    }
+    return tasks;
 }
 
 async function fetchSheetCSV() {
@@ -561,7 +546,19 @@ function renderSchedule() {
         cells.push(`
             <div class="calendar-day${outside}${today}">
                 <span class="calendar-day-number">${date.getDate()}</span>
- …2773 tokens truncated…ided")}</p>
+                <div class="calendar-events">
+                    ${shown.map(event => `
+                        <div class="calendar-event ${escapeHTML(event.type || "schedule")}" tabindex="0">
+                            <span class="calendar-event-label">${escapeHTML(compactScheduleTitle(event.title))}</span>
+                            <div class="calendar-event-popover">
+                                <strong>${escapeHTML(event.time)}</strong>
+                                <p>${escapeHTML(event.title)}</p>
+                            </div>
+                        </div>
+                    `).join("")}
+                    ${events.length > shown.length ? `
+                        <div class="calendar-more" tabindex="0">
+                            +${ev…2580 tokens truncated…ided")}</p>
             </div>
             <div class="quest-reason">${escapeHTML(next.reason)}</div>
             <dl class="quest-meta">
